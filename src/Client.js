@@ -82,21 +82,23 @@ class Client extends EventEmitter {
     /**
      * Sets up events and requirements, kicks off authentication request
      */
-    async initialize() {
-        let [browser, page] = [null, null];
+    async initialize(browser, window, pie) {
+        // let [browser, page] = [null, null];
+        const page = await pie.getPage(browser, window);
 
         await this.authStrategy.beforeBrowserInitialized();
 
-        const puppeteerOpts = this.options.puppeteer;
-        if (puppeteerOpts && puppeteerOpts.browserWSEndpoint) {
-            browser = await puppeteer.connect(puppeteerOpts);
-            page = await browser.newPage();
-        } else {
-            browser = await puppeteer.launch(puppeteerOpts);
-            page = (await browser.pages())[0];
-        }
-      
-        await page.setUserAgent(this.options.userAgent);
+        // const puppeteerOpts = this.options.puppeteer;
+        // if (puppeteerOpts && puppeteerOpts.browserWSEndpoint) {
+        //     browser = await puppeteer.connect(puppeteerOpts);
+        //     page = await browser.newPage();
+        // } else {
+        //     browser = await puppeteer.launch(puppeteerOpts);
+        //     page = (await browser.pages())[0];
+        // }
+
+        // await page.setUserAgent(this.options.userAgent);
+        page.setUserAgent(this.options.userAgent);
         if (this.options.bypassCSP) await page.setBypassCSP(true);
 
         this.pupBrowser = browser;
